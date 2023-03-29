@@ -9,5 +9,14 @@
         android:id="@+id/homeFragment"
         android:name="com.example.footballapp.view.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_standingsFragment"
+            app:destination="@id/standingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/standingsFragment"
+        android:name="com.example.footballapp.view.StandingsFragment"
+        android:label="fragment_standings"
+        tools:layout="@layout/fragment_standings" />
 </navigation>

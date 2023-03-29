@@ -11,11 +11,11 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("/")
+    @GET("countries")
     suspend fun getCountries(
-        @Query("action") action: String = "get_countries",
-        @Query("apiKey") apiKey: String,
-    ): Response<List<GetAllCountriesItem>>
+        @Query("APIkey") apiKey: String,
+        @Query("action") action: String = "get_countries"
+    ): List<GetAllCountriesItem>
 
     @GET("/")
     suspend fun getAllCompetition(

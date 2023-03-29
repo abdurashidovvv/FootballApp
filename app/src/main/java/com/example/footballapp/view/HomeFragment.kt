@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.footballapp.R
 import com.example.footballapp.databinding.FragmentHomeBinding
 import com.example.footballapp.models.countries.GetAllCountriesItem
@@ -19,12 +21,12 @@ import com.example.footballapp.view.adapters.StandingsRvAdapter
 import com.example.footballapp.viewmodel.MyFootballViewModel
 import com.example.footballapp.viewmodel.MyViewModelFactory
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), StandingsRvAdapter.RvClick {
 
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
-    lateinit var apiService: ApiService
-    lateinit var myFootballViewModel: MyFootballViewModel
-    lateinit var myFootballRepository: MyFootballRepository
+    private lateinit var apiService: ApiService
+    private lateinit var myFootballViewModel: MyFootballViewModel
+    private lateinit var myFootballRepository: MyFootballRepository
     private lateinit var standingsRvAdapter: StandingsRvAdapter
     private lateinit var list:ArrayList<GetAllCountriesItem>
 
@@ -40,22 +42,27 @@ class HomeFragment : Fragment() {
             this, MyViewModelFactory(myFootballRepository)
         )[MyFootballViewModel::class.java]
 
+
         myFootballViewModel.getAllCountries().observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    it.data?.let { it1 -> list.addAll(it1) }
-                    Log.d(TAG, "onCreate: $it")
+                    Log.d(TAG, "onCreate: ${it.data}")
+                    list.addAll(it.data!!)
+                    standingsRvAdapter= StandingsRvAdapter(list, this)
+                    binding.myRv.adapter=standingsRvAdapter
                 }
                 Status.LOADING -> {
                     Log.d(TAG, "onCreate: Loading")
                 }
                 Status.ERROR -> {
-                    Log.d(TAG, "onCreate: Error")
+                    Log.d(TAG, "onCreate: ${it.message}")
                 }
             }
         }
-        standingsRvAdapter= StandingsRvAdapter(list, myFootballViewModel)
-        binding.myRv.adapter=standingsRvAdapter
         return binding.root
+    }
+
+    override fun onClick(getAllCountriesItem: GetAllCountriesItem) {
+        findNavController().navigate(R.id.standingsFragment, bundleOf("key" to getAllCountriesItem.country_id))
     }
 }

@@ -24,33 +24,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-    private val TAG = "MainActivity"
-    lateinit var apiService: ApiService
-    lateinit var myFootballViewModel: MyFootballViewModel
-    lateinit var myFootballRepository: MyFootballRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        apiService = ApiClient.getApiService()
-        myFootballRepository = MyFootballRepository(apiService)
-        myFootballViewModel = ViewModelProvider(
-            this, MyViewModelFactory(myFootballRepository)
-        )[MyFootballViewModel::class.java]
-
-        myFootballViewModel.getAllCountries().observe(this) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    Log.d(TAG, "onCreate: $it")
-                }
-                Status.LOADING -> {
-                    Log.d(TAG, "onCreate: Loading")
-                }
-                Status.ERROR -> {
-                    Log.d(TAG, "onCreate: ${it.message}")
-                }
-            }
-        }
     }
 }

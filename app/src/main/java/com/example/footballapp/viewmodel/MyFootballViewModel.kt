@@ -11,6 +11,7 @@ import com.example.footballapp.repository.MyFootballRepository
 import com.example.footballapp.utils.Resource
 import com.example.footballapp.utils.Status
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class MyFootballViewModel(private val myFootballRepository: MyFootballRepository) : ViewModel() {
 
@@ -22,7 +23,7 @@ class MyFootballViewModel(private val myFootballRepository: MyFootballRepository
         viewModelScope.launch {
             try {
                 liveData.postValue(Resource(Status.SUCCESS,
-                    myFootballRepository.getAllCountries().body(),
+                    myFootballRepository.getAllCountries(),
                     "Success"))
             } catch (e: Exception) {
                 liveData.postValue(Resource(Status.ERROR, null, "${e.message}"))
@@ -30,6 +31,7 @@ class MyFootballViewModel(private val myFootballRepository: MyFootballRepository
         }
         return liveData
     }
+
 
     private val competitionsLiveData = MutableLiveData<Resource<List<GetAllCompetitionsItem>>>()
     fun getAllCompetitions(
