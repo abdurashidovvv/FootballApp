@@ -2,16 +2,10 @@ package com.example.footballapp.view.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapp.databinding.RvItemBinding
-import com.example.footballapp.models.competitions.GetAllCompetitionsItem
 import com.example.footballapp.models.countries.GetAllCountriesItem
-import com.example.footballapp.models.standings.GetStandingsItem
-import com.example.footballapp.utils.MyData.API_KEY
-import com.example.footballapp.utils.Status
 import com.example.footballapp.view.ClubRvAdapter
-import com.example.footballapp.viewmodel.MyFootballViewModel
 import com.squareup.picasso.Picasso
 
 class StandingsRvAdapter(

@@ -23,7 +23,7 @@ class StandingsFragment : Fragment() {
     private lateinit var apiService: ApiService
     private lateinit var myFootballViewModel: MyFootballViewModel
     private lateinit var myFootballRepository: MyFootballRepository
-    private lateinit var list:ArrayList<GetAllCompetitionsItem>
+    private lateinit var list: ArrayList<GetAllCompetitionsItem>
     private val TAG = "StandingsFragment"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,22 +34,28 @@ class StandingsFragment : Fragment() {
         myFootballViewModel = ViewModelProvider(
             this, MyViewModelFactory(myFootballRepository)
         )[MyFootballViewModel::class.java]
-        list= ArrayList()
 
-        val id=arguments?.getString("key")
+        list = ArrayList()
+
+        val id = arguments?.getString("key")
 
         Log.d(TAG, "onCreateView: $id")
-        myFootballViewModel.getAllCompetitions(id!!, API_KEY).observe(viewLifecycleOwner){
-            when(it.status){
-                Status.SUCCESS->{
-                    Log.d(TAG, "onCreateView: ${it.data}")
-                    list.addAll(it.data!!)
+        myFootballViewModel.getAllCompetitions(id!!, API_KEY).observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+
+                    if (it.data != null) {
+                        Log.d(TAG, "onCreateView: ${it.data}")
+                        list.addAll(it.data)
+                    } else {
+                        Log.d(TAG, "onCreateView: ")
+                    }
                     Log.d(TAG, "onCreateView: $list")
                 }
-                Status.ERROR->{
+                Status.ERROR -> {
                     Log.d(TAG, "onCreateView: ${it.message}")
                 }
-                Status.LOADING->{
+                Status.LOADING -> {
                     Log.d(TAG, "onCreateView: Loading")
                 }
             }

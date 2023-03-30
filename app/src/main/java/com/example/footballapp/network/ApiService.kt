@@ -1,5 +1,6 @@
 package com.example.footballapp.network
 
+import com.example.footballapp.models.competitions.GetAllCompetitions
 import com.example.footballapp.models.competitions.GetAllCompetitionsItem
 import com.example.footballapp.models.countries.GetAllCountriesItem
 import com.example.footballapp.models.standings.GetStandingsItem
@@ -14,7 +15,7 @@ interface ApiService {
     @GET("countries")
     suspend fun getCountries(
         @Query("APIkey") apiKey: String,
-        @Query("action") action: String = "get_countries"
+        @Query("action") action: String = "get_countries",
     ): List<GetAllCountriesItem>
 
     @GET("/")

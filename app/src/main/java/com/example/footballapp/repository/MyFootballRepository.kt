@@ -3,7 +3,7 @@ package com.example.footballapp.repository
 import com.example.footballapp.network.ApiService
 import com.example.footballapp.utils.MyData.API_KEY
 
-class MyFootballRepository(val apiService: ApiService) {
+class MyFootballRepository(private val apiService: ApiService) {
 
     suspend fun getAllCountries() = apiService.getCountries(apiKey = API_KEY)
 

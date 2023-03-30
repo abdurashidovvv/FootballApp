@@ -1,8 +1,10 @@
 package com.example.footballapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.footballapp.models.competitions.GetAllCompetitions
 import com.example.footballapp.models.competitions.GetAllCompetitionsItem
 import com.example.footballapp.models.countries.GetAllCountriesItem
 import com.example.footballapp.models.standings.GetStandingsItem
@@ -10,12 +12,14 @@ import com.example.footballapp.models.teams.GetTeamItem
 import com.example.footballapp.repository.MyFootballRepository
 import com.example.footballapp.utils.Resource
 import com.example.footballapp.utils.Status
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class MyFootballViewModel(private val myFootballRepository: MyFootballRepository) : ViewModel() {
 
     private val liveData = MutableLiveData<Resource<List<GetAllCountriesItem>>>()
+    private val TAG = "MyFootballViewModel"
 
 
     fun getAllCountries(): MutableLiveData<Resource<List<GetAllCountriesItem>>> {
@@ -38,14 +42,20 @@ class MyFootballViewModel(private val myFootballRepository: MyFootballRepository
         country_id: String,
         apiKey: String,
     ): MutableLiveData<Resource<List<GetAllCompetitionsItem>>> {
-        liveData.postValue(Resource(Status.LOADING, null, "Loading"))
-        viewModelScope.launch {
-            try {
+        competitionsLiveData.postValue(Resource(Status.LOADING, null, "Loading"))
+        viewModelScope.launch(Dispatchers.IO) {
+
+            if (myFootballRepository.getAllCompetitions(country_id, apiKey).isSuccessful) {
+                Log.d(TAG,
+                    "getAllCompetitions: ${
+                        myFootballRepository.getAllCompetitions(country_id,
+                            apiKey).body()
+                    }")
                 competitionsLiveData.postValue(Resource(Status.SUCCESS,
                     myFootballRepository.getAllCompetitions(country_id, apiKey).body(),
                     "Success"))
-            } catch (e: Exception) {
-                liveData.postValue(Resource(Status.ERROR, null, "Error"))
+            } else {
+                competitionsLiveData.postValue(Resource(Status.ERROR, null, "Error"))
             }
         }
         return competitionsLiveData
