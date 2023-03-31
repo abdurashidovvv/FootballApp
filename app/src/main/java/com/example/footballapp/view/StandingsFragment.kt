@@ -40,7 +40,7 @@ class StandingsFragment : Fragment() {
         val id = arguments?.getString("key")
 
         Log.d(TAG, "onCreateView: $id")
-        myFootballViewModel.getAllCompetitions(id!!, API_KEY).observe(viewLifecycleOwner) {
+        myFootballViewModel.getAllCompetitions("get_leagues", 44, API_KEY).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
 

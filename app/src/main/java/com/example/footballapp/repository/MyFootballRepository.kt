@@ -7,8 +7,8 @@ class MyFootballRepository(private val apiService: ApiService) {
 
     suspend fun getAllCountries() = apiService.getCountries(apiKey = API_KEY)
 
-    suspend fun getAllCompetitions(country_id: String, apiKey: String) =
-        apiService.getAllCompetition(country_id = country_id, apiKey = apiKey)
+    suspend fun getAllCompetitions(action:String, country_id: Int, apiKey: String) =
+        apiService.getAllCompetition(action = action, id = country_id, key = apiKey)
 
     suspend fun getStandings(league_id: String, apiKey: String) =
         apiService.getLeague(league_id = league_id, apiKey = apiKey)

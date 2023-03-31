@@ -39,23 +39,18 @@ class MyFootballViewModel(private val myFootballRepository: MyFootballRepository
 
     private val competitionsLiveData = MutableLiveData<Resource<List<GetAllCompetitionsItem>>>()
     fun getAllCompetitions(
-        country_id: String,
+        action: String,
+        country_id: Int,
         apiKey: String,
     ): MutableLiveData<Resource<List<GetAllCompetitionsItem>>> {
         competitionsLiveData.postValue(Resource(Status.LOADING, null, "Loading"))
         viewModelScope.launch(Dispatchers.IO) {
-
-            if (myFootballRepository.getAllCompetitions(country_id, apiKey).isSuccessful) {
-                Log.d(TAG,
-                    "getAllCompetitions: ${
-                        myFootballRepository.getAllCompetitions(country_id,
-                            apiKey).body()
-                    }")
+            try {
                 competitionsLiveData.postValue(Resource(Status.SUCCESS,
-                    myFootballRepository.getAllCompetitions(country_id, apiKey).body(),
+                    myFootballRepository.getAllCompetitions(action, country_id, apiKey),
                     "Success"))
-            } else {
-                competitionsLiveData.postValue(Resource(Status.ERROR, null, "Error"))
+            } catch (e: Exception) {
+                competitionsLiveData.postValue(Resource(Status.ERROR, null, e.message))
             }
         }
         return competitionsLiveData
