@@ -56,16 +56,19 @@ class MyFootballViewModel(private val myFootballRepository: MyFootballRepository
         return competitionsLiveData
     }
 
+
+    //Get Standings
     private val leagueLiveData = MutableLiveData<Resource<List<GetStandingsItem>>>()
     fun getLeagues(
-        league_id: String,
-        apiKey: String,
+        action: String,
+        league_id: Int,
+        apiKey: String
     ): MutableLiveData<Resource<List<GetStandingsItem>>> {
         leagueLiveData.postValue(Resource(Status.LOADING, null, "Loading"))
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 leagueLiveData.postValue(Resource(Status.SUCCESS,
-                    myFootballRepository.getStandings(league_id, apiKey).body(),
+                    myFootballRepository.getStandings(action,league_id, apiKey),
                     "Success"))
             } catch (e: Exception) {
                 liveData.postValue(Resource(Status.ERROR, null, "${e.message}"))

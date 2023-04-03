@@ -22,16 +22,16 @@ interface ApiService {
     @GET("/")
     suspend fun getAllCompetition(
         @Query("action") action: String = "get_leagues",
-        @Query("country_id") id:  Int = 6,
-        @Query("APIkey") key: String = "xxx"
+        @Query("country_id") id: Int = 6,
+        @Query("APIkey") key: String = "xxx",
     ): List<GetAllCompetitionsItem>
 
     @GET("/")
     suspend fun getLeague(
         @Query("action") action: String = "get_standings",
-        @Query("league_id") league_id: String,
-        @Query("apiKey") apiKey: String,
-    ): Response<List<GetStandingsItem>>
+        @Query("league_id") league_id: Int = 302,
+        @Query("APIkey") key: String = "xxx",
+    ): List<GetStandingsItem>
 
     @GET("/")
     suspend fun getTeam(

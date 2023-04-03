@@ -14,6 +14,7 @@ import com.example.footballapp.network.ApiService
 import com.example.footballapp.repository.MyFootballRepository
 import com.example.footballapp.utils.MyData.API_KEY
 import com.example.footballapp.utils.Status
+import com.example.footballapp.view.adapters.StandingsRvAdapter
 import com.example.footballapp.viewmodel.MyFootballViewModel
 import com.example.footballapp.viewmodel.MyViewModelFactory
 
@@ -40,27 +41,26 @@ class StandingsFragment : Fragment() {
         val id = arguments?.getString("key")
 
         Log.d(TAG, "onCreateView: $id")
-        myFootballViewModel.getAllCompetitions("get_leagues", 44, API_KEY).observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-
-                    if (it.data != null) {
-                        Log.d(TAG, "onCreateView: ${it.data}")
-                        list.addAll(it.data)
-                    } else {
-                        Log.d(TAG, "onCreateView: ")
+        myFootballViewModel.getAllCompetitions("get_leagues", id!!.toInt(), API_KEY)
+            .observe(viewLifecycleOwner) {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        if (it.data != null) {
+                            Log.d(TAG, "onCreateView: ${it.data}")
+                            list.addAll(it.data)
+                        } else {
+                            Log.d(TAG, "onCreateView: ")
+                        }
+                        Log.d(TAG, "onCreateView: $list")
                     }
-                    Log.d(TAG, "onCreateView: $list")
-                }
-                Status.ERROR -> {
-                    Log.d(TAG, "onCreateView: ${it.message}")
-                }
-                Status.LOADING -> {
-                    Log.d(TAG, "onCreateView: Loading")
+                    Status.ERROR -> {
+                        Log.d(TAG, "onCreateView: ${it.message}")
+                    }
+                    Status.LOADING -> {
+                        Log.d(TAG, "onCreateView: Loading")
+                    }
                 }
             }
-        }
-
         return binding.root
     }
 }
